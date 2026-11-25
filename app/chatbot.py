@@ -1,3 +1,4 @@
+from app.ai_disclosure import with_ai_disclosure  # envelope: Art. 50(1)
 """Ava: candidate-facing recruiting assistant for TalentScreen."""
 import json
 import os
@@ -6,7 +7,7 @@ from app.screening import score_candidate
 
 MODEL = os.environ.get("TALENTSCREEN_MODEL", "claude-sonnet-5-5")
 
-WELCOME_MESSAGE = "Hi, I'm Ava from TalentScreen. Tell me about the role you're applying for and I'll check your application."
+WELCOME_MESSAGE = with_ai_disclosure("Hi, I'm Ava from TalentScreen. Tell me about the role you're applying for and I'll check your application.")
 
 SYSTEM_PROMPT = (
     "You are Ava, a recruiting assistant. Answer candidates' questions about their application. "
