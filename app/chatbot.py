@@ -1,4 +1,5 @@
 """Ava: candidate-facing recruiting assistant for TalentScreen."""
+from app.ai_disclosure import with_ai_disclosure  # envelope: Art. 50(1)
 from app.human_approval import require_human_approval  # envelope: Art. 14
 import time as _envelope_time  # envelope: Art. 12
 from app.ai_event_log import log_model_call  # envelope: Art. 12
@@ -9,7 +10,7 @@ from app.screening import score_candidate
 
 MODEL = os.environ.get("TALENTSCREEN_MODEL", "claude-sonnet-5-5")
 
-WELCOME_MESSAGE = "Hi, I'm Ava from TalentScreen. Tell me about the role you're applying for and I'll check your application."
+WELCOME_MESSAGE = with_ai_disclosure("Hi, I'm Ava from TalentScreen. Tell me about the role you're applying for and I'll check your application.")
 
 SYSTEM_PROMPT = (
     "You are Ava, a recruiting assistant. Answer candidates' questions about their application. "
