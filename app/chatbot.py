@@ -1,4 +1,5 @@
 """Ava: candidate-facing recruiting assistant for TalentScreen."""
+from app.human_approval import require_human_approval  # envelope: Art. 14
 import json
 import os
 
@@ -35,8 +36,9 @@ def _client():
     return anthropic.Anthropic()
 
 
-def execute_tool(name, args):
+def execute_tool(name, args, approved_by=None):
     """Run a tool the model asked for. Decisions take effect immediately."""
+    require_human_approval(str(name), approved_by)  # envelope: Art. 14
     if name == "shortlist_candidate":
         DECISIONS[args["candidate_id"]] = "shortlisted"
         return {"ok": True, "status": "shortlisted"}
