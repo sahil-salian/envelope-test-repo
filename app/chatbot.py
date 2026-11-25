@@ -1,4 +1,6 @@
 """Ava: candidate-facing recruiting assistant for TalentScreen."""
+import time as _envelope_time  # envelope: Art. 12
+from app.ai_event_log import log_model_call  # envelope: Art. 12
 import json
 import os
 
@@ -52,6 +54,7 @@ def reply(history, candidate=None, client=None):
     system = SYSTEM_PROMPT
     if candidate is not None:
         system += f"\nCandidate {candidate['id']} screening score: {score_candidate(candidate):.2f}"
+    _envelope_t0 = _envelope_time.monotonic()  # envelope: Art. 12
     response = client.messages.create(
         model=MODEL,
         max_tokens=600,
@@ -59,6 +62,7 @@ def reply(history, candidate=None, client=None):
         tools=TOOLS,
         messages=history,
     )
+    log_model_call(model=str(getattr(response, "model", "unknown")), purpose="chat", outcome="ok", latency_ms=(_envelope_time.monotonic() - _envelope_t0) * 1000)  # envelope: Art. 12
     texts = []
     for block in response.content:
         if block.type == "tool_use":
